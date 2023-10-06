@@ -8,8 +8,8 @@ import torch
 BATCH_SIZE = 32
 NUM_WORKERS = 0
 HIDDEN_UNITS = 16
-LEARNING_RATE = 0.00001
-EPOCHS = 2
+LEARNING_RATE = 0.001
+EPOCHS = 25
 SEED = 42
 
 # torch.manual_seed(SEED)
@@ -38,11 +38,11 @@ def main():
         num_workers=NUM_WORKERS,  # type: ignore
     )
 
-    model = model_builder.LedgeriseLens(
+    model = model_builder.OceanGate(
         input_channels=3, hidden_units=HIDDEN_UNITS, output_channels=len(class_names)
     ).to(device)
 
-    model.load_state_dict(torch.load(f="models/LedgeriseLensV4.pth"))
+    model.load_state_dict(torch.load(f="models/OceanGateV0.pth"))
 
     loss_fn = torch.nn.CrossEntropyLoss()
 
@@ -58,7 +58,7 @@ def main():
         device=device,  # type: ignore
     )
 
-    utils.save_model(model=model, target_dir="models", model_name="LedgeriseLensV4.pth")
+    utils.save_model(model=model, target_dir="models", model_name="OceanGateV0.pth")
 
 
 if __name__ == "__main__":
