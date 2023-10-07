@@ -21,7 +21,7 @@ transform = transforms.Compose(
     ]
 )
 
-image = cv2.imread("./preprocess/data/img4.png", cv2.IMREAD_UNCHANGED)
+image = cv2.imread("./preprocess/data/img8.png", cv2.IMREAD_UNCHANGED)
 
 
 def main():
@@ -77,12 +77,13 @@ def main():
             cv2.putText(
                 result,
                 text,
-                (x, y + 300),
+                (x, y + 100),
                 cv2.FONT_HERSHEY_SIMPLEX,
-                3,
+                1,
                 (255, 255, 255),
-                10,
+                3,
             )
+
             plt.imshow(result)
             plt.axis("off")
             plt.show()
