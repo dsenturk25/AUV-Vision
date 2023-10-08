@@ -7,7 +7,7 @@ image = cv2.imread("./preprocess/data/img4.png", cv2.IMREAD_UNCHANGED)
 
 def preprocess(image):
     image = cv2.cvtColor(image, cv2.COLOR_RGB2BGR)
-    sat = cv2.cvtColor(image, cv2.COLOR_RGB2HSV)[:, :, 2]
+    sat = cv2.cvtColor(image, cv2.COLOR_RGB2HSV)[:, :, 1]
 
     # hsv = cv2.cvtColor(image, cv2.COLOR_BGR2HSV)
     # lower_blue = np.array([78, 158, 124])
@@ -22,7 +22,7 @@ def preprocess(image):
     kernel = np.zeros((10, 10), np.uint8)
     img_erosion = cv2.erode(edges, kernel, iterations=1)
 
-    OPEN_KERNEL, CLOSE_KERNEL = np.ones((25, 25), np.uint8), np.ones((20, 20), np.uint8)
+    OPEN_KERNEL, CLOSE_KERNEL = np.ones((5, 5), np.uint8), np.ones((15, 15), np.uint8)
 
     morph = cv2.morphologyEx(cv2.bitwise_not(img_erosion), cv2.MORPH_OPEN, OPEN_KERNEL)
     morph = cv2.morphologyEx(morph, cv2.MORPH_CLOSE, CLOSE_KERNEL)
@@ -34,7 +34,7 @@ def preprocess(image):
     )
 
     rectangle_images = []
-    min_contour_area = 100000
+    min_contour_area = 10000
     try:
         hierarchy = hierarchy[0]
     except:

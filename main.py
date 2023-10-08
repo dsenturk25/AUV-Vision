@@ -12,7 +12,7 @@ model = model_builder.OceanGate(
     input_channels=3, hidden_units=HIDDEN_UNITS, output_channels=len(class_names)
 )
 
-model.load_state_dict(torch.load(f="../OceanGate2/models/OceanGateV0.pth"))
+model.load_state_dict(torch.load(f="../OceanGate2/models/OceanGateV2.pth"))
 
 transform = transforms.Compose(
     [
@@ -21,7 +21,7 @@ transform = transforms.Compose(
     ]
 )
 
-image = cv2.imread("./preprocess/data/img8.png", cv2.IMREAD_UNCHANGED)
+image = cv2.imread("./preprocess/data/img10.png", cv2.IMREAD_UNCHANGED)
 
 
 def main():
@@ -44,7 +44,10 @@ def main():
             class_names=class_names,
         )
 
-        if pred_label == "net":
+        print(pred_label)
+        print(pred_prob)
+
+        if pred_label == "net" and (pred_prob[0][0] * 100) >= 85:
             probability = pred_prob[0][0] * 100
 
             img_rgb = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
@@ -61,13 +64,9 @@ def main():
 
             gray_image = cv2.cvtColor(res, cv2.COLOR_BGR2GRAY)
 
-            # Create a mask for non-black regions (assuming black is [0, 0, 0] in BGR)
             mask = (gray_image > 0).astype(np.uint8) * 255
 
-            # Increase the green channel in non-black regions to make them more green
-            res[
-                mask > 0, 1
-            ] += 50  # Increase the greenness (adjust the value as needed)
+            res[mask > 0, 1] += 50
 
             res = cv2.cvtColor(res, cv2.COLOR_BGR2RGB)
 
@@ -77,13 +76,61 @@ def main():
             cv2.putText(
                 result,
                 text,
-                (x, y + 100),
+                (x + 100, y + 50),
                 cv2.FONT_HERSHEY_SIMPLEX,
                 1,
                 (255, 255, 255),
                 3,
             )
 
+            plt.figure(figsize=(10, 7))
+            plt.subplot(1, 2, 1)
+            plt.imshow(cv2.cvtColor(image, cv2.COLOR_BGR2RGB))
+            plt.subplot(1, 2, 2)
+            plt.imshow(result)
+            plt.axis("off")
+            plt.show()
+
+        else:
+            probability = pred_prob[0][1] * 100
+
+            img_rgb = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
+
+            cv2.rectangle(img_rgb, (x, y), (x + w, y + h), (255, 255, 255), -1)
+            img_gray = cv2.cvtColor(img_rgb, cv2.COLOR_RGB2GRAY)
+            _, thresh = cv2.threshold(img_gray, 254, 255, cv2.THRESH_BINARY)
+            res = cv2.bitwise_and(thresh, morph)
+            res = cv2.cvtColor(res, cv2.COLOR_BGR2RGB)
+
+            img_rgb = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
+
+            res = cv2.bitwise_and(res, img_rgb)
+
+            gray_image = cv2.cvtColor(res, cv2.COLOR_BGR2GRAY)
+
+            mask = (gray_image > 0).astype(np.uint8) * 255
+
+            res[mask > 0, 1] += 50
+
+            res = cv2.cvtColor(res, cv2.COLOR_BGR2RGB)
+
+            result = res + img_rgb
+
+            text = f"Pred: Not ghost net"
+            cv2.putText(
+                result,
+                text,
+                (x + 100, y + 50),
+                cv2.FONT_HERSHEY_SIMPLEX,
+                1,
+                (255, 255, 255),
+                3,
+            )
+
+            plt.figure(figsize=(10, 7))
+            plt.subplot(1, 2, 1)
+            plt.imshow(cv2.cvtColor(image, cv2.COLOR_BGR2RGB))
+            plt.subplot(1, 2, 2)
             plt.imshow(result)
             plt.axis("off")
             plt.show()

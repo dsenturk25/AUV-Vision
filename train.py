@@ -8,8 +8,8 @@ import torch
 BATCH_SIZE = 32
 NUM_WORKERS = 0
 HIDDEN_UNITS = 16
-LEARNING_RATE = 0.001
-EPOCHS = 5
+LEARNING_RATE = 0.00001
+EPOCHS = 1
 SEED = 42
 
 # torch.manual_seed(SEED)
@@ -42,7 +42,7 @@ def main():
         input_channels=3, hidden_units=HIDDEN_UNITS, output_channels=len(class_names)
     ).to(device)
 
-    model.load_state_dict(torch.load(f="models/OceanGateV0.pth"))
+    model.load_state_dict(torch.load(f="models/OceanGateV2.pth"))
 
     loss_fn = torch.nn.CrossEntropyLoss()
 
