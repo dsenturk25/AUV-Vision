@@ -21,7 +21,7 @@ transform = transforms.Compose(
     ]
 )
 
-image = cv2.imread("./preprocess/data/img10.png", cv2.IMREAD_UNCHANGED)
+image = cv2.imread("./preprocess/data/img5.png", cv2.IMREAD_UNCHANGED)
 
 
 def main():
@@ -47,7 +47,7 @@ def main():
         print(pred_label)
         print(pred_prob)
 
-        if pred_label == "net" and (pred_prob[0][0] * 100) >= 85:
+        if pred_label == "net" and (pred_prob[0][0] * 100) >= 87:
             probability = pred_prob[0][0] * 100
 
             img_rgb = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
@@ -76,7 +76,7 @@ def main():
             cv2.putText(
                 result,
                 text,
-                (x + 100, y + 50),
+                (x, y + 50),
                 cv2.FONT_HERSHEY_SIMPLEX,
                 1,
                 (255, 255, 255),
@@ -120,7 +120,7 @@ def main():
             cv2.putText(
                 result,
                 text,
-                (x + 100, y + 50),
+                (x, y + 50),
                 cv2.FONT_HERSHEY_SIMPLEX,
                 1,
                 (255, 255, 255),

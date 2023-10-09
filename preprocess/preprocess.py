@@ -2,12 +2,12 @@ import cv2
 import matplotlib.pyplot as plt
 import numpy as np
 
-image = cv2.imread("./preprocess/data/img4.png", cv2.IMREAD_UNCHANGED)
+image = cv2.imread("./preprocess/data/img0.png", cv2.IMREAD_UNCHANGED)
 
 
 def preprocess(image):
     image = cv2.cvtColor(image, cv2.COLOR_RGB2BGR)
-    sat = cv2.cvtColor(image, cv2.COLOR_RGB2HSV)[:, :, 1]
+    sat = cv2.cvtColor(image, cv2.COLOR_RGB2HSV)[:, :, 0]
 
     # hsv = cv2.cvtColor(image, cv2.COLOR_BGR2HSV)
     # lower_blue = np.array([78, 158, 124])
