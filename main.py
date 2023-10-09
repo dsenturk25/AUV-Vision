@@ -21,11 +21,18 @@ transform = transforms.Compose(
     ]
 )
 
-image = cv2.imread("./preprocess/data/img5.png", cv2.IMREAD_UNCHANGED)
+image = cv2.imread("./preprocess/data/img10.png", cv2.IMREAD_UNCHANGED)
 
 
 def main():
     rectangles, morph = preprocess(image=image)
+
+    if len(rectangles) <= 0:
+        image_rgb = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
+        plt.imshow(image_rgb)
+        plt.title("No ghost net possibilities found.")
+        plt.axis("off")
+        plt.show()
 
     for i in rectangles:
         x, y, w, h = i[0], i[1], i[2], i[3]
