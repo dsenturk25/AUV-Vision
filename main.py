@@ -12,7 +12,7 @@ model = model_builder.OceanGate(
     input_channels=3, hidden_units=HIDDEN_UNITS, output_channels=len(class_names)
 )
 
-model.load_state_dict(torch.load(f="../OceanGate2/models/OceanGateV2.pth"))
+model.load_state_dict(torch.load(f="../OceanGate2/models/OceanGateV0.pth"))
 
 transform = transforms.Compose(
     [
@@ -21,10 +21,8 @@ transform = transforms.Compose(
     ]
 )
 
-image = cv2.imread("./preprocess/data/img10.png", cv2.IMREAD_UNCHANGED)
 
-
-def main():
+def main(image):
     rectangles, morph = preprocess(image=image)
 
     if len(rectangles) <= 0:
@@ -54,7 +52,7 @@ def main():
         print(pred_label)
         print(pred_prob)
 
-        if pred_label == "net" and (pred_prob[0][0] * 100) >= 87:
+        if pred_label == "net" and (pred_prob[0][0] * 100) >= 86:
             probability = pred_prob[0][0] * 100
 
             img_rgb = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
@@ -90,11 +88,14 @@ def main():
                 3,
             )
 
-            plt.figure(figsize=(10, 7))
+            plt.figure(figsize=(15, 6))
             plt.subplot(1, 2, 1)
             plt.imshow(cv2.cvtColor(image, cv2.COLOR_BGR2RGB))
+            plt.title("Feed")
+            plt.axis("off")
             plt.subplot(1, 2, 2)
             plt.imshow(result)
+            plt.title("Result")
             plt.axis("off")
             plt.show()
 
@@ -134,14 +135,19 @@ def main():
                 3,
             )
 
-            plt.figure(figsize=(10, 7))
+            plt.figure(figsize=(15, 6))
             plt.subplot(1, 2, 1)
             plt.imshow(cv2.cvtColor(image, cv2.COLOR_BGR2RGB))
+            plt.title("Feed")
+            plt.axis("off")
             plt.subplot(1, 2, 2)
             plt.imshow(result)
+            plt.title("Result")
             plt.axis("off")
             plt.show()
 
 
 if __name__ == "__main__":
-    main()
+    for i in range(1):
+        image = cv2.imread(f"./preprocess/data/img{i + 30}.png", cv2.IMREAD_UNCHANGED)
+        main(image)

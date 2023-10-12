@@ -7,7 +7,7 @@ image = cv2.imread("./preprocess/data/img0.png", cv2.IMREAD_UNCHANGED)
 
 def preprocess(image):
     image = cv2.cvtColor(image, cv2.COLOR_RGB2BGR)
-    sat = cv2.cvtColor(image, cv2.COLOR_RGB2HSV)[:, :, 0]
+    sat = cv2.cvtColor(image, cv2.COLOR_BGR2HSV_FULL)[:, :, 2]  # 1. gray
 
     # hsv = cv2.cvtColor(image, cv2.COLOR_BGR2HSV)
     # lower_blue = np.array([78, 158, 124])
@@ -17,12 +17,12 @@ def preprocess(image):
 
     # _, thresh = cv2.threshold(sat, 90, 255, 0)
 
-    edges = cv2.Canny(image, 100, 255)
+    edges = cv2.Canny(sat, 100, 255)
 
-    kernel = np.zeros((10, 10), np.uint8)
+    kernel = np.zeros((8, 8), np.uint8)
     img_erosion = cv2.erode(edges, kernel, iterations=1)
 
-    OPEN_KERNEL, CLOSE_KERNEL = np.ones((5, 5), np.uint8), np.ones((15, 15), np.uint8)
+    OPEN_KERNEL, CLOSE_KERNEL = np.ones((5, 5), np.uint8), np.ones((20, 20), np.uint8)
 
     morph = cv2.morphologyEx(cv2.bitwise_not(img_erosion), cv2.MORPH_OPEN, OPEN_KERNEL)
     morph = cv2.morphologyEx(morph, cv2.MORPH_CLOSE, CLOSE_KERNEL)
@@ -48,8 +48,11 @@ def preprocess(image):
             min_x, max_x = min(x, min_x), max(x + w, max_x)
             min_y, max_y = min(y, min_y), max(y + h, max_y)
             # cv2.rectangle(image, (x, y), (x + w, y + h), (255, 0, 0), 10)
-            extracted_rectangle = image[y : y + h, x : x + w]
-            rectangle_images.append(list([x, y, w, h]))
+            if x > 5 and y > 5:
+                # extracted_rectangle = image[y : y + h, x : x + w]
+                rectangle_images.append(list([x, y, w, h]))
+            else:
+                pass
     if max_x - min_x > 0 and max_y - min_y > 0:
         pass
 
